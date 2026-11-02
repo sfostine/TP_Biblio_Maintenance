@@ -18,41 +18,38 @@ Votre mission : **comprendre**, **automatiser la vérification**, **sécuriser p
 puis **automatiser la livraison** (CI → image Docker → GitHub Container Registry → Release),
 comme vu dans les semaines 1 à 8.
 
-> ⚠️ Le projet fourni ne contient **volontairement** ni `Dockerfile`, ni `.dockerignore`, ni workflow GitHub Actions,
+> Le projet fourni ne contient **volontairement** ni `Dockerfile`, ni `.dockerignore`, ni workflow GitHub Actions,
 > ni configuration JaCoCo. C'est **vous** qui les écrivez.
 
 ---
 
 ## Plan de match suggéré
 
-| Partie | Contenu | Durée |
-|---|---|---|
-| 0 | Mise en place du dépôt et règles de travail | 10 min |
-| A | Lire le code, exécuter, tester avec Swagger | 25 min |
-| B | Pipeline CI (matrice JDK 21 / 25) | 25 min |
-| C | Tests unitaires + rapport JaCoCo | 30 min |
-| D | Code smells : identifier et corriger | 30 min |
-| E | Docker, Codespaces, GHCR, SemVer, Release | 45 min |
-| F | Remise | 5 min |
-
-Le temps est serré : ne restez pas bloqué plus de 10 minutes sur un point — avancez et revenez-y.
-
+| Partie | Contenu |
+|---|---|
+| 0 | Mise en place du dépôt et règles de travail |
+| A | Lire le code, exécuter, tester avec Swagger |
+| B | Pipeline CI (matrice JDK 21 / 25) |
+| C | Tests unitaires + rapport JaCoCo |
+| D | Code smells : identifier et corriger |
+| E | Docker, Codespaces, GHCR, SemVer, Release |
+| F | Remise | 
 ---
 
 ## Partie 0 — Mise en place et règles de travail (semaine 1 : Git)
 
 1. Sur la page GitHub du dépôt modèle, cliquez sur **Use this template → Create a new repository**.
    Nommez votre dépôt **`TP3_NomEtudiant`** (ex. `TP3_Tremblay`), en **privé**.
-2. Ajoutez l'enseignant comme **contributeur** : *Settings → Collaborators → Add people* → **`sfostine`**.
+2. Ajoutez l'enseignant comme **contributeur** : **`sfostine`**.
 3. Clonez votre dépôt et vérifiez que l'application compile (`./mvnw clean verify`).
 
 ### Règles obligatoires pour tout le TP
 
-- ❌ **Aucun `push` direct sur `master`.** Chaque changement se fait sur une branche
+- **Aucun `push` direct sur `master`.** Chaque changement se fait sur une branche
   (`feature/...`, `fix/...`) créée à partir de `master`.
 - Pour chaque partie : branche → commits clairs (un commit = un changement logique) → **Pull Request vers `master`**.
-- Sur **chaque** Pull Request, ajoutez **`sfostine`** dans **Reviewers**.
-- ✅ **On ne fusionne (`Merge`) une Pull Request vers `master` que si le workflow de build est vert**
+- Sur **chaque** Pull Request, ajoutez **`sfostine`** dans **Reviewers**. Vous pouvez quand même compléter la pull request par vous-même.
+- **On ne fusionne (`Merge`) une Pull Request vers `master` que si le workflow de build est vert**
   (tous les jobs de la matrice). Si le build est rouge : corrigez sur la même branche, poussez, attendez le nouveau résultat.
   *(Dès que votre pipeline existe — partie B ; la PR qui introduit le pipeline est la première à être vérifiée par lui.)*
 
@@ -76,7 +73,7 @@ Parcourez les packages `model`, `repository`, `service`, `controller`, `exceptio
 Ouvrez **http://localhost:8080/swagger-ui.html**.
 
 ### A.3 Tester avec Swagger
-Exécutez ces scénarios et notez le code HTTP obtenu (capture d'écran d'au moins deux) :
+Exécutez ces scénarios et notez le code HTTP obtenu ainsi que le résultat et explique que veut dire ce code:
 
 | # | Appel | Résultat attendu à vérifier |
 |---|---|---|
@@ -129,7 +126,7 @@ depuis l'onglet **Actions** pour confirmer le déclencheur manuel.
    ./mvnw clean verify
    # rapport : target/site/jacoco/index.html
    ```
-   > ⚠️ La version `0.8.12` de la note de cours **ne supporte pas Java 25**. Utilisez **0.8.14**.
+   >  La version `0.8.12` de la note de cours **ne supporte pas Java 25**. Utilisez **0.8.14**.
    > Le rapport doit être généré pendant la phase `test`/`verify` (ajoutez l'exécution `report`).
 4. Modifiez votre workflow pour qu'il publie aussi le **rapport JaCoCo** en artefact, **même si les tests échouent**.
 
@@ -147,7 +144,7 @@ Le code contient **3 à 4 code smells** du catalogue de la semaine 6.
 3. Après chaque correction, relancez `./mvnw verify` : les tests doivent rester **verts**.
    (Si vous changez la signature d'une méthode, adaptez les tests concernés dans un commit à part.)
 
-> 💡 Rappel : réusiner ne change **pas** le comportement observable de l'API.
+> Rappel : réusiner ne change **pas** le comportement observable de l'API.
 
 Branche `refactor/code-smells`, Pull Request, build vert, fusion.
 
@@ -160,7 +157,7 @@ Branche `refactor/code-smells`, Pull Request, build vert, fusion.
 image de base **JRE** légère, **utilisateur non-root**, port 8080 documenté, **utilise le `.jar` déjà
 construit par le workflow** (aucune recompilation dans l'image). Ajoutez un `.dockerignore`.
 
-> ⚠️ Attention : un `.dockerignore` qui exclut tout le dossier `target/` empêcherait `COPY target/*.jar`
+> Attention : un `.dockerignore` qui exclut tout le dossier `target/` empêcherait `COPY target/*.jar`
 > de trouver le `.jar`. Réfléchissez à ce qu'il faut exclure — et à ce qu'il faut garder.
 
 ### E.2 Tester le Dockerfile dans GitHub Codespaces
@@ -199,7 +196,7 @@ puis ajoutez, **uniquement sur un tag `vX.Y.Z`** :
 
 ## Partie F — Remise
 
-Aucun fichier à téléverser : l'enseignant (`sfostine`) doit avoir accès à votre dépôt **`TP3_NomEtudiant`**, qui contient :
+Aucun fichier à téléverser : je (`sfostine`) dois avoir accès à votre dépôt **`TP3_NomEtudiant`**, qui contient :
 
 - le code final, les tests, le `pom.xml` avec JaCoCo, le `Dockerfile`, le `.dockerignore`, `ci.yml` ;
 - un `README.md` avec : réponses de la partie A, couverture JaCoCo (C), tableau des smells (D),
